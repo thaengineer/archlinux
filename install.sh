@@ -28,7 +28,7 @@ parted /dev/${DEVICE} mkpart primary ext4 0% 100%
 parted /dev/${DEVICE} set 1 boot on
 
 # 05 filesystem
-mkfs.btrfs -f /dev/${DEVICE}1
+mkfs.ext4 -F /dev/${DEVICE}1
 mount /dev/${DEVICE}1 /mnt
 
 # 06 mirrors
