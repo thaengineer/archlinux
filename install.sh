@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # vars
-DEVICE=""
-IFACE=""
-ESSID=""
-WLANPASS=''
-HOSTNAME=""
-DOMAIN=""
-ROOTPASS=''
-USERNAME=""
-USERPASS=''
+DEVICE="sda"
+IFACE="wlan0"
+ESSID="skynet"
+WLANPASS='j@ck!nA70wnR1$kDeadhead'
+HOSTNAME="anubis"
+DOMAIN="ra"
+ROOTPASS='07031991'
+USERNAME="stephen"
+USERPASS='07031991'
 
 
 # 01 keyboard layout
