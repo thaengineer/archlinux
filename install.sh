@@ -37,7 +37,7 @@ sed -i '93s/^#Include/Include/' /etc/pacman.conf
 
 # 07 install base
 pacman -Sy --noconfirm
-pacstrap -i /mnt base base-devel linux linux-firmware git --noconfirm
+pacstrap -i /mnt base base-devel linux linux-firmware btrfs-progs git --noconfirm
 genfstab -U -p /mnt >> /mnt/etc/fstab
 # sed -i '5s/data=ordered/discard/' /mnt/etc/fstab
 
