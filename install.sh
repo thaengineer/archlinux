@@ -37,7 +37,7 @@ sed -i '93s/^#Include/Include/' /etc/pacman.conf
 
 # 07 install base
 pacman -Sy --noconfirm
-pacstrap -i /mnt base base-devel linux linux-firmware git --noconfirm
+pacstrap -i /mnt base base-devel linux linux-firmware git grub sudo --noconfirm
 genfstab -U -p /mnt >> /mnt/etc/fstab
 sed -i 's/rw,relatime/defaults,relatime,discard/' /mnt/etc/fstab
 
