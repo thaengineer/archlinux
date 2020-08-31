@@ -23,7 +23,8 @@ sleep 5
 timedatectl set-ntp true
 
 # 04 partitions
-parted /dev/${DEVICE} mklabel gpt
+# parted /dev/${DEVICE} mklabel gpt
+parted /dev/${DEVICE} mklabel msdos
 parted /dev/${DEVICE} mkpart primary btrfs 0% 100%
 parted /dev/${DEVICE} set 1 boot on
 
