@@ -16,7 +16,7 @@ USERPASS=''
 loadkeys us
 
 # 02 connect to network
-iwctl --password ${WLANPASS} station ${IFACE} connect ${ESSID} psk
+iwctl --passphrase ${WLANPASS} station ${IFACE} connect ${ESSID} psk
 sleep 5
 
 # 03 time
