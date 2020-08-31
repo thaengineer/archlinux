@@ -23,9 +23,8 @@ sleep 5
 timedatectl set-ntp true
 
 # 04 partitions
-# parted /dev/${DEVICE} mklabel gpt
-parted /dev/${DEVICE} mklabel msdos
-parted /dev/${DEVICE} mkpart primary btrfs 0% 100%
+parted /dev/${DEVICE} mklabel gpt
+parted /dev/${DEVICE} mkpart primary ext4 0% 100%
 parted /dev/${DEVICE} set 1 boot on
 
 # 05 filesystem
@@ -38,7 +37,7 @@ sed -i '93s/^#Include/Include/' /etc/pacman.conf
 
 # 07 install base
 pacman -Sy --noconfirm
-pacstrap -i /mnt base base-devel linux linux-firmware btrfs-progs git --noconfirm
+pacstrap -i /mnt base base-devel linux linux-firmware git --noconfirm
 genfstab -U -p /mnt >> /mnt/etc/fstab
 # sed -i '5s/data=ordered/discard/' /mnt/etc/fstab
 
