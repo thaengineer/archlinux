@@ -23,7 +23,7 @@ sleep 5
 timedatectl set-ntp true
 
 # 04 partitions
-parted /dev/${DEVICE} mklabel gpt
+parted /dev/${DEVICE} mklabel msdos
 parted /dev/${DEVICE} mkpart primary ext4 0% 100%
 parted /dev/${DEVICE} set 1 boot on
 
@@ -39,7 +39,7 @@ sed -i '93s/^#Include/Include/' /etc/pacman.conf
 pacman -Sy --noconfirm
 pacstrap -i /mnt base base-devel linux linux-firmware git --noconfirm
 genfstab -U -p /mnt >> /mnt/etc/fstab
-# sed -i '5s/data=ordered/discard/' /mnt/etc/fstab
+sed -i 's/rw,relatime/defaults,relatime,discard/' /mnt/etc/fstab
 
 # 08 configure network
 echo -e "# ${ESSID}\nInterface=${IFACE}\nConnection=wireless\nSecurity=wpa\nESSID=${ESSID}\nIP=dhcp\nKey=${WLANPASS}" > /mnt/etc/netctl/${ESSID}
