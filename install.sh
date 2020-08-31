@@ -24,11 +24,12 @@ timedatectl set-ntp true
 
 # 04 partitions
 parted /dev/${DEVICE} mklabel msdos
-parted /dev/${DEVICE} mkpart primary ext4 0% 100%
+parted /dev/${DEVICE} mkpart primary btrfs 0% 100%
 parted /dev/${DEVICE} set 1 boot on
 
 # 05 filesystem
-mkfs.ext4 -F /dev/${DEVICE}1
+# mkfs.ext4 -F /dev/${DEVICE}1
+mkfs.btrfs -f /dev/${DEVICE}1
 mount /dev/${DEVICE}1 /mnt
 
 # 06 mirrors
@@ -37,7 +38,7 @@ sed -i '93s/^#Include/Include/' /etc/pacman.conf
 
 # 07 install base
 pacman -Sy --noconfirm
-pacstrap -i /mnt base base-devel linux linux-firmware git grub sudo --noconfirm
+pacstrap -i /mnt base base-devel linux linux-firmware btrfs-progs git grub sudo --noconfirm
 genfstab -U -p /mnt >> /mnt/etc/fstab
 sed -i 's/rw,relatime/defaults,relatime,discard/' /mnt/etc/fstab
 
