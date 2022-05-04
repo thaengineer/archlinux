@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# vars
 DEVICE=""
 IFACE=""
 ESSID=""
