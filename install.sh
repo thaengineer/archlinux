@@ -63,8 +63,6 @@ arch-chroot /mnt /bin/bash -c "sed -i '93s/^#\[multilib\]/\[multilib\]/' /etc/pa
 arch-chroot /mnt /bin/bash -c "sed -i '94s/^#Include/Include/' /etc/pacman.conf"
 arch-chroot /mnt /bin/bash -c "ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime"
 arch-chroot /mnt /bin/bash -c "hwclock --systohc --utc"
-arch-chroot /mnt /bin/bash -c "timedatectl set-timezone America/New_York"
-arch-chroot /mnt /bin/bash -c "timedatectl set-ntp true"
 arch-chroot /mnt /bin/bash -c "echo \"en_US.UTF-8 UTF-8\" > /etc/locale.gen"
 arch-chroot /mnt /bin/bash -c "locale-gen"
 arch-chroot /mnt /bin/bash -c "echo \"LANG=en_US.UTF-8\" > /etc/locale.conf"
