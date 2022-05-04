@@ -39,7 +39,6 @@ sed -i '93s/^#Include/Include/' /etc/pacman.conf
 
 # 07 install base
 pacman -Sy --noconfirm
-pacman-key --init
 pacstrap -i /mnt base base-devel linux linux-firmware grub efibootmgr sudo git go --noconfirm
 
 # 08 fstab
