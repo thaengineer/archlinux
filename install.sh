@@ -6,29 +6,32 @@ IFACE=""
 ESSID=""
 WLANPASS=''
 HOSTNAME=""
-DOMAIN=""
 ROOTPASS=''
 USERNAME=""
 USERPASS=''
 
-
 # 01 network
 #iwctl --passphrase ${WLANPASS} station ${IFACE} connect ${ESSID} psk
-sleep 5
+#sleep 5
 
 # 02 wipe
 # dd if=/dev/zero of=/dev/${DEVICE} status=progress
 
 # 03 partition
 parted /dev/${DEVICE} mklabel gpt
-parted /dev/${DEVICE} mkpart primary ext4 0% 100%
+parted /dev/${DEVICE} mkpart primary fat32 0% 512MiB name 1 boot
+parted /dev/${DEVICE} mkpart primary ext4 512MiB 100% name 2 root
 parted /dev/${DEVICE} set 1 boot on
+# parted /dev/${DEVICE} set 1 esp on
 
 # 04 format
-mkfs.ext4 -F /dev/${DEVICE}1
+mkfs.vfat -F32 /dev/${DEVICE}1
+mkfs.ext4 -F /dev/${DEVICE}2
 
 # 05 mount
-mount /dev/${DEVICE}1 /mnt
+mount /dev/${DEVICE}2 /mnt
+mkdir -p /mnt/boot
+mount /dev/${DEVICE}1 /mnt/boot
 
 # 06 mirrors
 sed -i '92s/^#\[multilib\]/\[multilib\]/' /etc/pacman.conf
@@ -41,10 +44,10 @@ pacstrap -i /mnt base base-devel linux linux-firmware grub efibootmgr sudo git g
 
 # 08 fstab
 genfstab -U -p /mnt >> /mnt/etc/fstab
-sed -i 's/rw,relatime/rw,noatime/' /mnt/etc/fstab
+sed -i 's/rw,relatime/rw,noatime/g' /mnt/etc/fstab
 
 # 09 configure network
-cat > /mnt/etc/netctl/${ESSID} << EOF
+# cat > /mnt/etc/netctl/${ESSID} << EOF
 ${ESSID}
 Interface=${IFACE}
 Connection=wireless
@@ -53,7 +56,7 @@ ESSID=${ESSID}
 IP=dhcp
 Key=${WLANPASS}
 EOF
-chmod 600 /mnt/etc/netctl/${ESSID}
+# chmod 600 /mnt/etc/netctl/${ESSID}
 
 # 10 chroot
 arch-chroot /mnt /bin/bash -c "sed -i '93s/^#\[multilib\]/\[multilib\]/' /etc/pacman.conf"
@@ -78,14 +81,13 @@ arch-chroot /mnt /bin/bash -c "echo \"ff02::2    ip6-allrouters\" >> /etc/hosts"
 arch-chroot /mnt /bin/bash -c "touch /etc/resolv.conf"
 arch-chroot /mnt /bin/bash -c "mkinitcpio -p linux"
 arch-chroot /mnt /bin/bash -c "echo -e \"${ROOTPASS}\n${ROOTPASS}\n\" | passwd"
-arch-chroot /mnt /bin/bash -c "useradd -G users,wheel -m -s /usr/bin/bash -U ${USERNAME}"
-arch-chroot /mnt /bin/bash -c "echo -e \"${USERPASS}\n${USERPASS}\n\" | passwd ${USERNAME}"
-arch-chroot /mnt /bin/bash -c "grub-install --recheck --target=i386-pc /dev/${DEVICE}"
-# arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory /boot --boot-directory /boot"
+arch-chroot /mnt /bin/bash -c "useradd -G users,wheel -m -p '07031991' -s /usr/bin/bash -U ${USERNAME}"
+# arch-chroot /mnt /bin/bash -c "grub-install --recheck --target=i386-pc /dev/${DEVICE}"
+arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory /boot --boot-directory /boot"
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 
 # 11 post-install
-cat > /home/${USERNAME}/post-install.sh << EOF
+cat > /root/post-install.sh << EOF
 git clone https://aur.archlinux.org/yay.git
 sudo chown -R ${USERNAME}:${USERNAME} yay
 cd yay
@@ -98,8 +100,8 @@ sed -i '69s/^#default_user       simone/default_user       ${USERNAME}/' /etc/sl
 sed -i '77s/^#auto_login          no/^#auto_login          yes/' /etc/slim.conf
 systemctl enable slim
 alsactl store
-#netctl disable dhcpcd
-#netctl enable skynet
+netctl disable dhcpcd
+netctl enable skynet
 EOF
 
 # 12 unmount
