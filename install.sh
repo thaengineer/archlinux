@@ -96,7 +96,6 @@ sed -i '69s/^#default_user       simone/default_user       ${USERNAME}/' /etc/sl
 sed -i '77s/^#auto_login          no/^#auto_login          yes/' /etc/slim.conf
 systemctl enable slim
 alsactl store
-netctl disable dhcpcd
 netctl enable skynet
 EOF
 
