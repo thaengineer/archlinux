@@ -24,7 +24,7 @@ parted /dev/${DEVICE} set 1 boot on
 # parted /dev/${DEVICE} set 1 esp on
 
 # 04 format
-mkfs.vfat -F32 /dev/${DEVICE}1
+mkfs.fat -F32 /dev/${DEVICE}1
 mkfs.ext4 -F /dev/${DEVICE}2
 
 # 05 mount
