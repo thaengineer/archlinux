@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 DEVICE=""
 IFACE=""
 ESSID=""
@@ -83,9 +82,8 @@ arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory 
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 
 # 11 post-install
-cat > /root/post-install.sh << EOF
+cat > /mnt/home/${USERNAME}/post-install.sh << EOF
 git clone https://aur.archlinux.org/yay.git
-sudo chown -R ${USERNAME}:${USERNAME} yay
 cd yay
 makepkg PKGBUILD
 pacman -U yay*.tar.zst --noconfirm
