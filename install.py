@@ -97,7 +97,7 @@ def install():
     #arch-chroot /mnt /bin/bash -c "touch /etc/resolv.conf"
     #arch-chroot /mnt /bin/bash -c "mkinitcpio -p linux"
     #arch-chroot /mnt /bin/bash -c "echo -e \"${ROOTPASS}\n${ROOTPASS}\n\" | passwd"
-    #arch-chroot /mnt /bin/bash -c "useradd -G users,wheel -m -p '07031991' -s /usr/bin/bash -U ${USERNAME}"
+    #arch-chroot /mnt /bin/bash -c "useradd -G users,wheel -m -p 'password123' -s /usr/bin/bash -U ${USERNAME}"
     #arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory /boot --boot-directory /boot"
     #arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 
